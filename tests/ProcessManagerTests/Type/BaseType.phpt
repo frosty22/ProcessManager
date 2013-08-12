@@ -7,7 +7,7 @@ class MockType extends \ProcessManager\Type\BaseType {
 
 	public function check($value)
 	{
-		return $value === "foo";
+		return is_object($value) || $value === "foo";
 	}
 
 }
@@ -32,3 +32,7 @@ Tester\Assert::exception(function(){
 	$type = new MockType();
 	$type->sanitize("bar");
 }, 'ProcessManager\InvalidArgumentException');
+
+
+$obj = new stdClass();
+Tester\Assert::equal($obj, $type->sanitize($obj));
