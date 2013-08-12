@@ -1,0 +1,151 @@
+<?php
+
+namespace ProcessManager;
+
+/**
+ * Represent of data collection.
+ *
+ * @copyright Copyright (c) 2013 Ledvinka Vít
+ * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
+ *
+ */
+class Collection implements \ArrayAccess {
+
+
+	/**
+	 * @var array
+	 */
+	private $values = array();
+
+
+	/**
+	 * Is collection checked
+	 * @var bool
+	 */
+	private $checked = FALSE;
+
+
+	/**
+	 * Check if key exist
+	 * @param string|int $name
+	 * @return bool
+	 */
+	public function exist($name)
+	{
+		return isset($this->values[$name]);
+	}
+
+
+	/**
+	 * Get value
+	 * @param string|int $name
+	 * @return mixed|NULL
+	 */
+	public function __get($name)
+	{
+		return isset($this->values[$name]) ? $this->values[$name] : NULL;
+	}
+
+
+	/**
+	 * Set value
+	 * @param string|int $name
+	 * @param mixed $value
+	 * @throws InvalidStateException
+	 * @throws InvalidArgumentException
+	 */
+	public function __set($name, $value)
+	{
+		if ($this->isChecked())
+			throw new InvalidStateException("Cannot modified checked collection.");
+
+		if (!is_string($name) && !is_integer($name))
+			throw new InvalidArgumentException("Name of type must be string or number.");
+
+		$this->values[$name] = $value;
+	}
+
+
+	/**
+	 * Check if exist key
+	 * @param string|int $name
+	 * @return bool
+	 */
+	public function __isset($name)
+	{
+		return $this->exist($name);
+	}
+
+
+	/**
+	 * @param string|int $name
+	 * @throws InvalidStateException
+	 */
+	public function __unset($name)
+	{
+		if ($this->isChecked())
+			throw new InvalidStateException("Cannot modified checked collection.");
+
+		unset($this->values[$name]);
+	}
+
+	/**
+	 * Set collection as checked
+	 * @return $this
+	 */
+	public function setChecked()
+	{
+		$this->checked = TRUE;
+		return $this;
+	}
+
+
+	/**
+	 * Is collection checked
+	 * @return bool
+	 */
+	public function isChecked()
+	{
+		return $this->checked;
+	}
+
+
+	/**
+	 * @param string $offset
+	 * @return bool
+	 */
+	public function offsetExists($offset)
+	{
+		return $this->exist($offset);
+	}
+
+
+	/**
+	 * @param string|int $offset
+	 * @param mixed $value
+	 */
+	public function offsetSet($offset, $value)
+	{
+		$this->__set($offset, $value);
+	}
+
+
+	/**
+	 * @param string|int $offset
+	 * @return mixed
+	 */
+	public function offsetGet($offset)
+	{
+		return $this->__get($offset);
+	}
+
+
+	/**
+	 * @param string|int $offset
+	 */
+	public function offsetUnset($offset)
+	{
+		$this->__unset($offset);
+	}
+
+}
