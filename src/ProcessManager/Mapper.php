@@ -11,7 +11,7 @@ use ProcessManager\Type;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class Mapper extends \Nette\Object {
+class Mapper extends \Nette\Object implements \Iterator {
 
 
 	/**
@@ -91,5 +91,59 @@ class Mapper extends \Nette\Object {
 		return $this->addType($name, new Type\Integer());
 	}
 
+
+	/**
+	 * Add object type
+	 * @param string $name
+	 * @param string $className Object instance of
+	 * @return Type\IType
+	 */
+	public function addObject($name, $className)
+	{
+		return $this->addType($name, new Type\Object($className));
+	}
+
+
+	/********************** Interface Iterator methods **********************/
+
+
+	/**
+	 * @return Type\IType|bool
+	 */
+	public function rewind() {
+		return reset($this->types);
+	}
+
+
+	/**
+	 * @return Type\IType
+	 */
+	public function current() {
+		return current($this->types);
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function key() {
+		return key($this->types);
+	}
+
+
+	/**
+	 * @return Type\IType|bool
+	 */
+	public function next() {
+		return next($this->types);
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function valid() {
+		return key($this->types) !== null;
+	}
 
 }
