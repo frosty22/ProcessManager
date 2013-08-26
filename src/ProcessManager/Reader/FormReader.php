@@ -55,11 +55,24 @@ class FormReader extends \Nette\FreezableObject implements IReader, \Iterator {
 	 */
 	public function rename($from, $to)
 	{
+		$this->copy($from, $to);
+		$this->remove($from);
+		return $this;
+	}
+
+
+	/**
+	 * Copy key
+	 * @param string $from
+	 * @param string $to
+	 * @return $this
+	 */
+	public function copy($from, $to)
+	{
 		$this->updating();
 
 		if (isset($this->values[$from])) {
 			$this->values[$to] = $this->values[$from];
-			unset($this->values[$from]);
 		}
 
 		return $this;

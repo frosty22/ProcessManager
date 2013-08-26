@@ -12,7 +12,8 @@ $mock->getValues(TRUE)
 		"baz" => new stdClass(),
 		"toRename" => "baz",
 		"toRemove" => TRUE,
-		"key" => "value"
+		"key" => "value",
+		"copy1" => "copied"
 ));
 
 $form = $mock->getMock();
@@ -22,6 +23,7 @@ $form = $mock->getMock();
 $reader = new \ProcessManager\Reader\FormReader($form);
 $reader->rename("toRename", "renamed");
 $reader->remove("toRemove");
+$reader->copy("copy1", "copy2");
 
 $reader->rename("key", "key.subkey");
 
@@ -35,6 +37,8 @@ foreach ($reader as $collection) {
 	Tester\Assert::null($collection->toRename);
 	Tester\Assert::null($collection->toRemove);
 	Tester\Assert::equal("value", $collection->key->subkey);
+	Tester\Assert::equal("copied", $collection->copy1);
+	Tester\Assert::equal("copied", $collection->copy2);
 }
 
 Tester\Assert::equal(1, $count);
