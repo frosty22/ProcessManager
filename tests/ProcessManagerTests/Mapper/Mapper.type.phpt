@@ -25,4 +25,4 @@ Tester\Assert::exception(function(){
 
 Tester\Assert::type('ProcessManager\Type\Text', $mapper->addText("foo2"));
 Tester\Assert::type('ProcessManager\Type\Integer', $mapper->addInteger("foo3"));
-
+Tester\Assert::type('ProcessManager\Type\Float', $mapper->addFloat("foo4"));

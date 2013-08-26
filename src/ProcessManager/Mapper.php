@@ -41,6 +41,61 @@ class Mapper extends \Nette\Object implements \Iterator {
 
 
 	/**
+	 * Add text type
+	 * @param string $name
+	 * @return Type\Text
+	 */
+	public function addText($name)
+	{
+		return $this->addType($name, new Type\Text());
+	}
+
+
+	/**
+	 * Add integer type
+	 * @param string $name
+	 * @return Type\Integer
+	 */
+	public function addInteger($name)
+	{
+		return $this->addType($name, new Type\Integer());
+	}
+
+
+	/**
+	 * Add float type
+	 * @param string $name
+	 * @return Type\IType
+	 */
+	public function addFloat($name)
+	{
+		return $this->addType($name, new Type\Float());
+	}
+
+	/**
+	 * Add object type
+	 * @param string $name
+	 * @param string $className Object instance of
+	 * @return Type\IType
+	 */
+	public function addObject($name, $className)
+	{
+		return $this->addType($name, new Type\Object($className));
+	}
+
+
+	/**
+	 * Shortcut for object type collection
+	 * @param string $name
+	 * @return Type\IType
+	 */
+	public function addCollection($name)
+	{
+		return $this->addObject($name, 'ProcessManager\Collection');
+	}
+
+
+	/**
 	 * Check collection and set validated
 	 * @param Collection $collection
 	 * @return Collection
@@ -68,51 +123,6 @@ class Mapper extends \Nette\Object implements \Iterator {
 		$collection->setChecked();
 
 		return $collection;
-	}
-
-
-	/**
-	 * Add text type
-	 * @param string $name
-	 * @return Type\Text
-	 */
-	public function addText($name)
-	{
-		return $this->addType($name, new Type\Text());
-	}
-
-
-	/**
-	 * Add integer type
-	 * @param string $name
-	 * @return Type\Integer
-	 */
-	public function addInteger($name)
-	{
-		return $this->addType($name, new Type\Integer());
-	}
-
-
-	/**
-	 * Add object type
-	 * @param string $name
-	 * @param string $className Object instance of
-	 * @return Type\IType
-	 */
-	public function addObject($name, $className)
-	{
-		return $this->addType($name, new Type\Object($className));
-	}
-
-
-	/**
-	 * Shortcut for object type collection
-	 * @param string $name
-	 * @return Type\IType
-	 */
-	public function addCollection($name)
-	{
-		return $this->addObject($name, 'ProcessManager\Collection');
 	}
 
 
