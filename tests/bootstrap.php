@@ -24,6 +24,7 @@ $_SERVER['REQUEST_TIME'] = 1234567890;
 $_ENV = $_GET = $_POST = array();
 
 
+require __DIR__ . "/../src/ProcessManager/Reader/IReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/XmlReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/FormReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/CsvReader.php";
@@ -35,6 +36,7 @@ require __DIR__ . "/../src/ProcessManager/Type/BaseType.php";
 require __DIR__ . "/../src/ProcessManager/Type/Text.php";
 require __DIR__ . "/../src/ProcessManager/Type/Integer.php";
 require __DIR__ . "/../src/ProcessManager/Type/Float.php";
+require __DIR__ . "/../src/ProcessManager/Type/Object.php";
 
 require __DIR__ . "/../src/ProcessManager/exceptions.php";
 require __DIR__ . "/../src/ProcessManager/Collection.php";
