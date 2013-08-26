@@ -51,13 +51,14 @@ class Mapper extends \Nette\Object implements \Iterator {
 	{
 		foreach ($this->types as $name => $type) {
 			if ($type->isRequired() && !isset($collection->$name)) {
-				throw new MissingKeyException($name);
+				throw new MissingKeyException($name, "Missing key '$name' in collection.");
 			}
 
 			if (isset($collection->$name)) {
 
 				if (!$type->check($collection->$name)) {
-					throw new InvalidValueException($name, $collection->$name);
+					throw new InvalidValueException($name, $collection->$name,
+						"Invalid value '".gettype($collection->$name)."' on key '$name'.");
 				}
 
 				$collection->$name = $type->sanitize($collection->$name);
@@ -101,6 +102,17 @@ class Mapper extends \Nette\Object implements \Iterator {
 	public function addObject($name, $className)
 	{
 		return $this->addType($name, new Type\Object($className));
+	}
+
+
+	/**
+	 * Shortcut for object type collection
+	 * @param string $name
+	 * @return Type\IType
+	 */
+	public function addCollection($name)
+	{
+		return $this->addObject($name, 'ProcessManager\Collection');
 	}
 
 

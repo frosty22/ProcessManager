@@ -20,10 +20,12 @@ class MissingKeyException extends RuntimeException {
 
 	/**
 	 * @param string $name
+	 * @param string $message
 	 */
-	public function __construct($name)
+	public function __construct($name, $message = "")
 	{
 		$this->name = $name;
+		$this->message = $message;
 	}
 
 
@@ -56,11 +58,13 @@ class InvalidValueException extends RuntimeException {
 	/**
 	 * @param string $name
 	 * @param mixed $value
+	 * @param string $message
 	 */
-	public function __construct($name, $value)
+	public function __construct($name, $value, $message = "")
 	{
 		$this->name = $name;
 		$this->value = $value;
+		$this->message = $message;
 	}
 
 
