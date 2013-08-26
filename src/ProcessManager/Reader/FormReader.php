@@ -4,7 +4,7 @@ namespace ProcessManager\Reader;
 use ProcessManager\Collection;
 
 /**
- *
+ * Reader for Nette\Forms\Form
  *
  * @copyright Copyright (c) 2013 Ledvinka Vít
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
@@ -49,8 +49,8 @@ class FormReader extends \Nette\FreezableObject implements IReader, \Iterator {
 
 	/**
 	 * Rename key
-	 * @param string $from
-	 * @param string $to
+	 * @param string $from Source key name
+	 * @param string $to Target key name
 	 * @return $this
 	 */
 	public function rename($from, $to)
@@ -63,8 +63,8 @@ class FormReader extends \Nette\FreezableObject implements IReader, \Iterator {
 
 	/**
 	 * Copy key
-	 * @param string $from
-	 * @param string $to
+	 * @param string $from Source key
+	 * @param string $to Target key
 	 * @return $this
 	 */
 	public function copy($from, $to)
@@ -81,7 +81,7 @@ class FormReader extends \Nette\FreezableObject implements IReader, \Iterator {
 
 	/**
 	 * Remove key
-	 * @param string $key
+	 * @param string $key Key name
 	 * @return $this
 	 */
 	public function remove($key)
