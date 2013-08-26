@@ -43,3 +43,7 @@ Tester\Assert::exception(function() use($collection) {
 }, 'ProcessManager\InvalidStateException');
 
 
+
+$collection = new \ProcessManager\Collection(array("foo" => "bar"));
+Tester\Assert::equal("bar", $collection->foo);
+

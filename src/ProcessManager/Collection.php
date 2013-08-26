@@ -26,6 +26,16 @@ class Collection implements \ArrayAccess {
 
 
 	/**
+	 * @param array $array
+	 */
+	public function __construct(array $array = array())
+	{
+		foreach ($array as $key => $value)
+			$this->$key = $value;
+	}
+
+
+	/**
 	 * Check if key exist
 	 * @param string|int $name
 	 * @return bool
@@ -62,7 +72,17 @@ class Collection implements \ArrayAccess {
 		if (!is_string($name) && !is_integer($name))
 			throw new InvalidArgumentException("Name of type must be string or number.");
 
-		$this->values[$name] = $value;
+		if (strpos($name, ".")) {
+			$key = mb_substr($name, 0, mb_strpos($name, "."));
+			$name = mb_substr($name, mb_strlen($key) + 1);
+
+			if (!isset($this->values[$key]))
+				$this->values[$key] = new Collection();
+
+			$this->values[$key]->$name = $value;
+		} else {
+			$this->values[$name] = $value;
+		}
 	}
 
 
