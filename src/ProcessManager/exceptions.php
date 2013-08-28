@@ -7,6 +7,7 @@ abstract class Exception extends \Exception { }
 abstract class LogicException extends Exception { }
 abstract class RuntimeException extends Exception { }
 
+class InvalidCallException extends LogicException { }
 class InvalidArgumentException extends LogicException { }
 class InvalidStateException extends LogicException { }
 

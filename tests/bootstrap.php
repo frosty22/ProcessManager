@@ -6,6 +6,7 @@ if (@!include __DIR__ . '/../../../../vendor/autoload.php') {
 	exit(1);
 }
 
+$dumper = new Tester\Dumper();
 
 // configure environment
 Tester\Environment::setup();
@@ -30,6 +31,7 @@ require __DIR__ . "/../src/ProcessManager/Reader/FormReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/CsvReader.php";
 
 require __DIR__ . "/../src/ProcessManager/Process/IProcess.php";
+require __DIR__ . "/../src/ProcessManager/Process/MultiProcess.php";
 
 require __DIR__ . "/../src/ProcessManager/Type/IType.php";
 require __DIR__ . "/../src/ProcessManager/Type/BaseType.php";
