@@ -2,11 +2,21 @@
 
 namespace ProcessManager;
 
+// Base core of ProcessManager exception
 abstract class Exception extends \Exception { }
 
+// Base logic and runtime of core of ProcessManager exception
 abstract class LogicException extends Exception { }
 abstract class RuntimeException extends Exception { }
 
+// Base exception for process
+abstract class ProcessException extends \Exception { }
+
+// Base logic and runtime expcetion for process
+abstract class ProcessLoginException extends ProcessException { }
+abstract class ProcessRuntimeException extends ProcessException { }
+
+// Specific exceptions of core of Processanager
 class InvalidCallException extends LogicException { }
 class InvalidArgumentException extends LogicException { }
 class InvalidStateException extends LogicException { }

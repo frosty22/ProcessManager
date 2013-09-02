@@ -40,6 +40,8 @@ require __DIR__ . "/../src/ProcessManager/Type/Integer.php";
 require __DIR__ . "/../src/ProcessManager/Type/Float.php";
 require __DIR__ . "/../src/ProcessManager/Type/Object.php";
 
+require __DIR__ . "/../src/ProcessManager/Execute.php";
+require __DIR__ . "/../src/ProcessManager/Executor.php";
 require __DIR__ . "/../src/ProcessManager/exceptions.php";
 require __DIR__ . "/../src/ProcessManager/Collection.php";
 require __DIR__ . "/../src/ProcessManager/Mapper.php";

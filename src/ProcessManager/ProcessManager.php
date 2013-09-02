@@ -34,6 +34,51 @@ class ProcessManager extends \Nette\Object {
 
 
 	/**
+	 * Execute process via Executor
+	 * @param Executor $executor
+	 */
+	public function execute(Executor $executor)
+	{
+		$reader = $executor->getReader();
+
+		if (!$reader instanceof \Iterator)
+			throw new InvalidArgumentException('Reader must implement Iterator interface.');
+
+		foreach ($reader as $collection) {
+
+			if (!$collection instanceof Collection)
+				throw new InvalidArgumentException('Iterator of reader must return only instanceof Collection
+													but "'.gettype($collection).'" was returned.');
+
+			foreach ($executor->getProcesses() as $execute) {
+
+				if ($execute->getNamespace() !== NULL) {
+					$processCollection = $collection->{$execute->getNamespace()};
+
+					if (!$processCollection instanceof Collection)
+						throw new InvalidArgumentException('Required sub collection not found, but
+														"'.gettype($processCollection).'" was returned.');
+
+				} else {
+					$processCollection = $collection;
+				}
+
+				try {
+					$this->executeProcess($execute->getProcess(), $processCollection);
+				} catch (ProcessException $e) {
+					if (!$executor->handleException($e))
+						throw $e;
+				}
+
+
+			}
+
+		}
+
+	}
+
+
+	/**
 	 * Execute process on collection.
 	 * @param IProcess $process
 	 * @param Collection $collection
@@ -52,28 +97,6 @@ class ProcessManager extends \Nette\Object {
 
 		$this->onBeforeExecute($process, $mapper, $collection);
 		$process->execute($collection);
-	}
-
-
-	/**
-	 * Execute process on reader.
-	 * @param IReader $reader
-	 * @param IProcess $process
-	 * @throws InvalidArgumentException
-	 */
-	public function execute(IReader $reader, IProcess $process)
-	{
-		if (!$reader instanceof \Iterator)
-			throw new InvalidArgumentException('Reader must implement Iterator interface.');
-
-		foreach ($reader as $collection) {
-			if (!$collection instanceof Collection)
-				throw new InvalidArgumentException('Iterator of reader must return only instanceof Collection
-													but "'.gettype($collection).'" was returned.');
-
-			$this->executeProcess($process, $collection);
-		}
-
 	}
 
 

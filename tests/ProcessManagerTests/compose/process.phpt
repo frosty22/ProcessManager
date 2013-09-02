@@ -84,7 +84,11 @@ Tester\Assert::equal("subvalue", $reader->getCollection()->colRequired->key);
 
 
 $manager = new \ProcessManager\ProcessManager();
-$manager->execute($reader, new TestProcess());
+
+$executor = new \ProcessManager\Executor($reader);
+$executor->addProcess(new TestProcess());
+
+$manager->execute($executor);
 
 
 
@@ -102,8 +106,10 @@ $mock->getValues(TRUE)
 $form = $mock->getMock();
 $reader = new \ProcessManager\Reader\FormReader($form);
 
+$executor = new \ProcessManager\Executor($reader);
+$executor->addProcess(new TestProcess());
 
-$manager->execute($reader, new TestProcess());
+$manager->execute($executor);
 
 
 
