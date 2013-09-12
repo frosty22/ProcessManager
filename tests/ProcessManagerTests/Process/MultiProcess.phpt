@@ -42,5 +42,5 @@ Tester\Assert::equal(2, $i);
 
 Tester\Assert::exception(function() use($process) {
 	$process->execute(new \ProcessManager\Collection());
-}, 'ProcessManager\InvalidCallException');
+}, 'ProcessManager\InvalidArgumentException');
 

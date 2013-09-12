@@ -33,6 +33,8 @@ require __DIR__ . "/../src/ProcessManager/Reader/CsvReader.php";
 require __DIR__ . "/../src/ProcessManager/Process/IProcess.php";
 require __DIR__ . "/../src/ProcessManager/Process/MultiProcess.php";
 
+require __DIR__ . "/../src/ProcessManager/Converter/IConverter.php";
+
 require __DIR__ . "/../src/ProcessManager/Type/IType.php";
 require __DIR__ . "/../src/ProcessManager/Type/BaseType.php";
 require __DIR__ . "/../src/ProcessManager/Type/Text.php";
@@ -40,10 +42,16 @@ require __DIR__ . "/../src/ProcessManager/Type/Integer.php";
 require __DIR__ . "/../src/ProcessManager/Type/Float.php";
 require __DIR__ . "/../src/ProcessManager/Type/Object.php";
 
-require __DIR__ . "/../src/ProcessManager/Execute.php";
+require __DIR__ . "/../src/ProcessManager/Execute/IExecute.php";
+require __DIR__ . "/../src/ProcessManager/Execute/BaseExecute.php";
+require __DIR__ . "/../src/ProcessManager/Execute/Converter.php";
+require __DIR__ . "/../src/ProcessManager/Execute/Process.php";
 require __DIR__ . "/../src/ProcessManager/Executor.php";
 require __DIR__ . "/../src/ProcessManager/exceptions.php";
 require __DIR__ . "/../src/ProcessManager/Collection.php";
 require __DIR__ . "/../src/ProcessManager/Mapper.php";
 require __DIR__ . "/../src/ProcessManager/ProcessManager.php";
+require __DIR__ . "/../src/ProcessManager/Listener/IdentifiedEntityConvertListener.php";
+
+
 

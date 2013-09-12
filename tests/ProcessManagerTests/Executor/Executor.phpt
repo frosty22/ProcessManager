@@ -11,18 +11,18 @@ $exector = new \ProcessManager\Executor($reader);
 
 
 $mock = new \Mockista\MockBuilder('ProcessManager\Process\Multiprocess');
+$mock->getRequiredMapper()->andReturn(new \ProcessManager\Mapper());
 $process = $mock->getMock();
 
 $exector->addProcess($process);
 $exector->addProcess($process, 'foo');
-
 
 Tester\Assert::type("array", $exector->getProcesses());
 Tester\Assert::equal(2, count($exector->getProcesses()));
 
 $i = 0;
 foreach ($exector->getProcesses() as $execute) {
-	Tester\Assert::type('ProcessManager\Execute', $execute);
+	Tester\Assert::type('ProcessManager\Execute\Process', $execute);
 
 	$i++;
 	if ($i === 1) {
@@ -32,7 +32,7 @@ foreach ($exector->getProcesses() as $execute) {
 		Tester\Assert::equal("foo", $execute->getNamespace());
 	}
 
-	Tester\Assert::equal($process, $execute->getProcess());
+	Tester\Assert::type('ProcessManager\Process\Multiprocess', $execute->getProcess());
 }
 
 Tester\Assert::equal($reader, $exector->getReader());
@@ -45,13 +45,7 @@ class FooException extends \ProcessManager\ProcessException {
 }
 
 Tester\Assert::false($exector->getCatchException());
-Tester\Assert::false($exector->handleException(new FooException()));
 
-$exector->onException[] = function(FooException $e) {
-	Tester\Assert::equal("Something", $e->getMessage());
-};
 
-$exector->setCatchException(TRUE);
 
-Tester\Assert::true($exector->handleException(new FooException()));
 

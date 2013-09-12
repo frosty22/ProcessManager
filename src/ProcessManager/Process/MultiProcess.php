@@ -3,6 +3,8 @@
 namespace ProcessManager\Process;
 
 use ProcessManager\Collection;
+use ProcessManager\Execute\Process;
+use ProcessManager\ExecuteProcess;
 use ProcessManager\InvalidCallException;
 use ProcessManager\Mapper;
 use ProcessManager\ProcessManager;
@@ -78,19 +80,8 @@ class MultiProcess extends \Nette\Object implements IProcess {
 	public function execute(Collection $collection)
 	{
 		foreach ($this->processes as $process) {
-
-			if ($process[1] !== NULL) {
-				$processCollection = $collection->{$process[1]};
-
-				if ($processCollection === NULL)
-					throw new InvalidCallException("Missing sub collection with name {$process[1]}.
-					Do not call execute directly, call it via ProcessManager.");
-
-			} else {
-				$processCollection = $collection;
-			}
-
-			$this->processManager->executeProcess($process[0], $processCollection);
+			$execute = new Process($process[0], $process[1]);
+			$execute->execute($collection);
 		}
 	}
 
