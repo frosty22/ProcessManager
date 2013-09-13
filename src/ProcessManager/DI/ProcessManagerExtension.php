@@ -14,9 +14,13 @@ use Nette\Config\CompilerExtension;
 class ProcessManagerExtension extends CompilerExtension {
 
 
+	/**
+	 * @var array
+	 */
 	private $defaults = array(
 		'listeners' => array(
-
+			'datetime' 			=> 'ProcessManager\Listener\DateTimeConvertListener',
+			'identifiedEntity'	=> 'ProcessManager\Listener\IdentifiedEntityConvertListener'
 		)
 	);
 
@@ -28,6 +32,13 @@ class ProcessManagerExtension extends CompilerExtension {
 
 		$processManager = $builder->addDefinition($this->prefix('processManager'))
 				->setClass('ProcessManager\ProcessManager');
+
+		foreach ($config["listeners"] as $name => $class) {
+			$builder->addDefinition($this->prefix('listener.' . $name))
+				->setClass($class)
+				->addTag('kdyby.subscriber');
+		}
+
 
 	}
 

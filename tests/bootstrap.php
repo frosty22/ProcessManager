@@ -29,6 +29,7 @@ require __DIR__ . "/../src/ProcessManager/Reader/IReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/XmlReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/FormReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/CsvReader.php";
+require __DIR__ . "/../src/ProcessManager/Reader/ArrayReader.php";
 
 require __DIR__ . "/../src/ProcessManager/Process/IProcess.php";
 require __DIR__ . "/../src/ProcessManager/Process/MultiProcess.php";
