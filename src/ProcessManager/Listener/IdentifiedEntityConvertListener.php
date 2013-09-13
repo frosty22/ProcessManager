@@ -54,7 +54,7 @@ class IdentifiedEntityConvertListener extends \Nette\Object implements \Kdyby\Ev
 	 * @param Collection $collection
 	 * @throws InvalidIdentifiedException
 	 */
-	public function onBeforeCheck(IProcess $process, Mapper $mapper, Collection $collection)
+	public function onBeforeProcessCheck(IProcess $process, Mapper $mapper, Collection $collection)
 	{
 		foreach ($mapper as $name => $type) {
 			if ($type instanceof Type\Object) {
