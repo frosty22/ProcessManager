@@ -9,8 +9,6 @@ $collection->foo = "bar";
 Tester\Assert::equal("bar", $collection->foo);
 Tester\Assert::null($collection->foo2);
 
-Tester\Assert::false($collection->isChecked());
-
 $collection->bar = array();
 
 $collection->baz = FALSE;
@@ -35,13 +33,6 @@ Tester\Assert::true(isset($collection->foo));
 Tester\Assert::exception(function() use($collection) {
 	$collection[array()] = true;
 }, 'ProcessManager\InvalidArgumentException');
-
-$collection->setChecked();
-
-Tester\Assert::exception(function() use($collection) {
-	$collection->foo = true;
-}, 'ProcessManager\InvalidStateException');
-
 
 
 $collection = new \ProcessManager\Collection(array("foo" => "bar"));

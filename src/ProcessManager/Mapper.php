@@ -120,8 +120,6 @@ class Mapper extends \Nette\Object implements \Iterator {
 			}
 		}
 
-		$collection->setChecked();
-
 		return $collection;
 	}
 

@@ -19,13 +19,6 @@ class Collection implements \ArrayAccess {
 
 
 	/**
-	 * Is collection checked
-	 * @var bool
-	 */
-	private $checked = FALSE;
-
-
-	/**
 	 * @param array $array
 	 */
 	public function __construct(array $array = array())
@@ -61,14 +54,10 @@ class Collection implements \ArrayAccess {
 	 * Set value
 	 * @param string|int $name
 	 * @param mixed $value
-	 * @throws InvalidStateException
 	 * @throws InvalidArgumentException
 	 */
 	public function __set($name, $value)
 	{
-		if ($this->isChecked())
-			throw new InvalidStateException("Cannot modified checked collection.");
-
 		if (!is_string($name) && !is_integer($name))
 			throw new InvalidArgumentException("Name of type must be string or number.");
 
@@ -99,34 +88,10 @@ class Collection implements \ArrayAccess {
 
 	/**
 	 * @param string|int $name
-	 * @throws InvalidStateException
 	 */
 	public function __unset($name)
 	{
-		if ($this->isChecked())
-			throw new InvalidStateException("Cannot modified checked collection.");
-
 		unset($this->values[$name]);
-	}
-
-	/**
-	 * Set collection as checked
-	 * @return $this
-	 */
-	public function setChecked()
-	{
-		$this->checked = TRUE;
-		return $this;
-	}
-
-
-	/**
-	 * Is collection checked
-	 * @return bool
-	 */
-	public function isChecked()
-	{
-		return $this->checked;
 	}
 
 
