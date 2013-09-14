@@ -63,9 +63,20 @@ class Mapper extends \Nette\Object implements \Iterator {
 
 
 	/**
+	 * Add boolean type
+	 * @param string $name
+	 * @return Type\Boolean
+	 */
+	public function addBoolean($name)
+	{
+		return $this->addType($name, new Type\Boolean());
+	}
+
+
+	/**
 	 * Add float type
 	 * @param string $name
-	 * @return Type\IType
+	 * @return Type\Float
 	 */
 	public function addFloat($name)
 	{
@@ -76,7 +87,7 @@ class Mapper extends \Nette\Object implements \Iterator {
 	 * Add object type
 	 * @param string $name
 	 * @param string $className Object instance of
-	 * @return Type\IType
+	 * @return Type\Object
 	 */
 	public function addObject($name, $className)
 	{
@@ -87,11 +98,12 @@ class Mapper extends \Nette\Object implements \Iterator {
 	/**
 	 * Shortcut for object type collection
 	 * @param string $name
-	 * @return Type\IType
+	 * @param string $className Object instance of
+	 * @return Type\Collection
 	 */
-	public function addCollection($name)
+	public function addCollection($name, $className)
 	{
-		return $this->addObject($name, 'ProcessManager\Collection');
+		return $this->addType($name, new Type\Collection($className));
 	}
 
 

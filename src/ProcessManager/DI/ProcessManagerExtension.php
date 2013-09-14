@@ -17,12 +17,7 @@ class ProcessManagerExtension extends CompilerExtension {
 	/**
 	 * @var array
 	 */
-	private $defaults = array(
-		'listeners' => array(
-			'datetime' 			=> 'ProcessManager\Listener\DateTimeConvertListener',
-			'identifiedEntity'	=> 'ProcessManager\Listener\IdentifiedEntityConvertListener'
-		)
-	);
+	private $defaults = array();
 
 
 	public function loadConfiguration()
@@ -31,15 +26,12 @@ class ProcessManagerExtension extends CompilerExtension {
 		$builder = $this->getContainerBuilder();
 
 		$processManager = $builder->addDefinition($this->prefix('processManager'))
-				->setClass('ProcessManager\ProcessManager');
+			->setClass('ProcessManager\ProcessManager');
 
-		foreach ($config["listeners"] as $name => $class) {
-			$builder->addDefinition($this->prefix('listener.' . $name))
-				->setClass($class)
-				->addTag('kdyby.subscriber');
-		}
-
+		$entityRequirements = $builder->addDefinition($this->prefix('entityRequirements'))
+			->setClass('ProcessManager\EntityRequirements');
 
 	}
+
 
 }

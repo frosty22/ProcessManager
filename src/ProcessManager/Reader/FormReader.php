@@ -101,9 +101,6 @@ class FormReader extends \Nette\FreezableObject implements IReader, \Iterator {
 	private $iterator = TRUE;
 
 
-	/**
-	 * @return Collection
-	 */
 	public function rewind() {
 		$this->iterator = TRUE;
 	}

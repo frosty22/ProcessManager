@@ -9,18 +9,11 @@ abstract class Exception extends \Exception { }
 abstract class LogicException extends Exception { }
 abstract class RuntimeException extends Exception { }
 
-// Base exception for process
-abstract class ProcessException extends \Exception { }
-
-// Base logic and runtime expcetion for process
-abstract class ProcessLogicException extends ProcessException { }
-abstract class ProcessRuntimeException extends ProcessException { }
-
-// Specific exceptions of core of Process manager
-class InvalidCallException extends LogicException { }
+// Logic exceptions
+class UnsupportedException extends LogicException { }
 class InvalidArgumentException extends LogicException { }
-class InvalidStateException extends LogicException { }
 
+// Runtime exceptions
 class MissingKeyException extends RuntimeException {
 
 	/**
@@ -97,7 +90,3 @@ class InvalidValueException extends RuntimeException {
 	}
 
 }
-
-
-class InvalidIdentifiedException extends InvalidValueException { }
-class InvalidExecuteException extends ProcessLogicException { }
