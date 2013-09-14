@@ -8,6 +8,7 @@ use ProcessManager\Execute\IExecute;
 use ProcessManager\Execute\Process;
 use ProcessManager\Process\IProcess;
 use ProcessManager\Reader\IReader;
+use ProcessManager\Type\Object;
 
 /**
  * Process executor.
@@ -143,6 +144,20 @@ class Executor extends \Nette\Object {
 	 */
 	public function execute(Collection $collection)
 	{
+		foreach ($this->getProcesses() as $processExecute) {
+			$mapper = $processExecute->getProcess()->getRequiredMapper();
+			foreach ($mapper as $target => $type) {
+				foreach ($this->getConverters() as $converterExecute) {
+					$requiredType = $converterExecute->getConverter()->getReturnedType();
+					if (($requiredType instanceof Object) && ($type instanceof Object)
+						&& ($requiredType->getClassName() === $type->getClassName())) {
+							$converterExecute->setTarget($target);
+					}
+				}
+			}
+		}
+
+
 		foreach ($this->getConverters() as $execute) {
 			$this->run($execute, $collection);
 		}

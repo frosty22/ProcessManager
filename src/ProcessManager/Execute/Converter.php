@@ -87,8 +87,12 @@ class Converter extends BaseExecute implements IExecute {
 	 */
 	public function execute(Collection $collection)
 	{
-		if ((count($this->target) === 0) && $this->isRequired())
-			throw new InvalidExecuteException('Converter "' . get_class($this->converter) . '" is required to call but no targets exists.');
+		if (count($this->target) === 0) {
+			if ($this->isRequired())
+				throw new InvalidExecuteException('Converter "' . get_class($this->converter) . '"
+						is required to call but no targets exists.');
+			return $collection;
+		}
 
 		$collection = $this->getTargetCollection($collection);
 
