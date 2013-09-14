@@ -151,7 +151,7 @@ class Executor extends \Nette\Object {
 					$requiredType = $converterExecute->getConverter()->getReturnedType();
 					if (($requiredType instanceof Object) && ($type instanceof Object)
 						&& ($requiredType->getClassName() === $type->getClassName())) {
-							$converterExecute->setTarget($target);
+						$converterExecute->setTarget($target);
 					}
 				}
 			}

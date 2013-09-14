@@ -94,9 +94,7 @@ class Converter extends BaseExecute implements IExecute {
 			return $collection;
 		}
 
-		$collection = $this->getTargetCollection($collection);
-
-		$result = $this->run($collection);
+		$result = $this->run($this->getTargetCollection($collection));
 		foreach ($this->target as $name)
 			$collection->$name = $result;
 
