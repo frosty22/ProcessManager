@@ -9,8 +9,21 @@ use ProcessManager\Process\IProcess;
  * @copyright Copyright (c) 2013 Ledvinka Vít
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
+ * @method onBeforeCheck(IProcess $process, Collection $collection)
+ * @method onBeforeExecute(IProcess $process, Collection $collection)
+ * @method onAfterExecute(IProcess $process, Collection $collection)
+ *
  */
 class Execute extends \Nette\Object {
+
+
+	/**
+	 * Events
+	 * @var array
+	 */
+	public $onBeforeCheck = array();
+	public $onBeforeExecute = array();
+	public $onAfterExecute = array();
 
 
 	/**
@@ -33,7 +46,8 @@ class Execute extends \Nette\Object {
 
 	/**
 	 * @param IProcess $process
-	 * @param string $namespace
+	 * @param null|string $namespace
+	 * @throws InvalidArgumentException
 	 */
 	public function __construct(IProcess $process, $namespace = NULL)
 	{
@@ -60,7 +74,9 @@ class Execute extends \Nette\Object {
 
 
 	/**
+	 * Run on collection
 	 * @param Collection $collection
+	 * @throws InvalidArgumentException
 	 */
 	public function run(Collection $collection)
 	{
@@ -75,11 +91,16 @@ class Execute extends \Nette\Object {
 													but "'.gettype($targetCollection).'" was returned.');
 
 		$mapper = $this->process->getRequiredMapper();
+
+		$this->onBeforeCheck($this->process, $targetCollection);
 		$mapper->check($targetCollection);
 
+		$this->onBeforeExecute($this->process, $targetCollection);
 		$result = $this->process->execute($targetCollection);
 		foreach ($this->targets as $target)
 			$collection->$target = $result;
+
+		$this->onAfterExecute($this->process, $collection);
 	}
 
 
