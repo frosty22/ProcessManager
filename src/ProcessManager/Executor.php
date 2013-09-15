@@ -13,7 +13,7 @@ use ProcessManager\Reader\IReader;
  * @method onReadCollection(IReader $reader, Collection $collection)
  * @method onBeforeProcessCheck(IProcess $process, Collection $collection)
  * @method onBeforeProcessExecute(IProcess $process, Collection $collection)
- * @method onAfterProcessExecute(IProcess $process, Collection $collection)
+ * @method onAfterProcessExecute(IProcess $process, Collection $collection, mixed $result)
  *
  */
 class Executor extends \Nette\Object {

@@ -11,7 +11,7 @@ use ProcessManager\Process\IProcess;
  *
  * @method onBeforeCheck(IProcess $process, Collection $collection)
  * @method onBeforeExecute(IProcess $process, Collection $collection)
- * @method onAfterExecute(IProcess $process, Collection $collection)
+ * @method onAfterExecute(IProcess $process, Collection $collection, mixed $result)
  *
  */
 class Execute extends \Nette\Object {
@@ -100,7 +100,7 @@ class Execute extends \Nette\Object {
 		foreach ($this->targets as $target)
 			$collection->$target = $result;
 
-		$this->onAfterExecute($this->process, $collection);
+		$this->onAfterExecute($this->process, $collection, $result);
 	}
 
 
