@@ -46,7 +46,7 @@ $collection = new \ProcessManager\Collection(array(
 	'next' => new FooEntity()
 ));
 
-$listener->onBeforeCheck($process, $process->getRequiredMapper(), $collection);
+$listener->onBeforeProcessCheck($process, $process->getRequiredMapper(), $collection);
 
 Tester\Assert::type('FooEntity', $collection->entity);
 Tester\Assert::type('FooEntity', $collection->next);
@@ -58,7 +58,7 @@ Tester\Assert::exception(function()use($listener, $process){
 		'entity' => 234
 	));
 
-	$listener->onBeforeCheck($process, $process->getRequiredMapper(), $collection);
+	$listener->onBeforeProcessCheck($process, $process->getRequiredMapper(), $collection);
 }, 'ProcessManager\InvalidIdentifiedException');
 
 }

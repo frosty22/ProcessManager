@@ -90,3 +90,6 @@ class InvalidValueException extends RuntimeException {
 	}
 
 }
+
+
+class InvalidIdentifiedException extends InvalidValueException { }

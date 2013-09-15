@@ -25,6 +25,8 @@ $_SERVER['REQUEST_TIME'] = 1234567890;
 $_ENV = $_GET = $_POST = array();
 
 
+require __DIR__ . "/../src/ProcessManager/EntityRequirements.php";
+
 require __DIR__ . "/../src/ProcessManager/Reader/IReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/XmlReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/FormReader.php";
@@ -32,9 +34,6 @@ require __DIR__ . "/../src/ProcessManager/Reader/CsvReader.php";
 require __DIR__ . "/../src/ProcessManager/Reader/ArrayReader.php";
 
 require __DIR__ . "/../src/ProcessManager/Process/IProcess.php";
-require __DIR__ . "/../src/ProcessManager/Process/MultiProcess.php";
-
-require __DIR__ . "/../src/ProcessManager/Converter/IConverter.php";
 
 require __DIR__ . "/../src/ProcessManager/Type/IType.php";
 require __DIR__ . "/../src/ProcessManager/Type/BaseType.php";
@@ -43,10 +42,7 @@ require __DIR__ . "/../src/ProcessManager/Type/Integer.php";
 require __DIR__ . "/../src/ProcessManager/Type/Float.php";
 require __DIR__ . "/../src/ProcessManager/Type/Object.php";
 
-require __DIR__ . "/../src/ProcessManager/Execute/IExecute.php";
-require __DIR__ . "/../src/ProcessManager/Execute/BaseExecute.php";
-require __DIR__ . "/../src/ProcessManager/Execute/Converter.php";
-require __DIR__ . "/../src/ProcessManager/Execute/Process.php";
+require __DIR__ . "/../src/ProcessManager/Execute.php";
 require __DIR__ . "/../src/ProcessManager/Executor.php";
 require __DIR__ . "/../src/ProcessManager/exceptions.php";
 require __DIR__ . "/../src/ProcessManager/Collection.php";
