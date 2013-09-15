@@ -31,6 +31,12 @@ class ProcessManager extends \Nette\Object {
 
 
 	/**
+	 * @var array
+	 */
+	private $joined = array();
+
+
+	/**
 	 * @param Executor $executor
 	 */
 	public function execute(Executor $executor)
@@ -48,10 +54,22 @@ class ProcessManager extends \Nette\Object {
 	 */
 	protected function joinEvents(Executor $executor)
 	{
-		$executor->onReadCollection += $this->onReadCollection;
-		$executor->onAfterProcessExecute += $this->onAfterProcessExecute;
-		$executor->onBeforeProcessCheck += $this->onBeforeProcessCheck;
-		$executor->onBeforeProcessExecute += $this->onBeforeProcessExecute;
+		$name = spl_object_hash($executor);
+		if (isset($this->joined[$name])) return;
+
+		foreach ($this->onReadCollection as $callback)
+			$executor->onReadCollection[] = $callback;
+
+		foreach ($this->onAfterProcessExecute as $callback)
+			$executor->onAfterProcessExecute[] = $callback;
+
+		foreach ($this->onBeforeProcessCheck as $callback)
+			$executor->onBeforeProcessCheck[] = $callback;
+
+		foreach ($this->onBeforeProcessExecute as $callback)
+			$executor->onBeforeProcessExecute[] = $callback;
+
+		$this->joined[$name] = TRUE;
 	}
 
 

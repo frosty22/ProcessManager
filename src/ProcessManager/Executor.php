@@ -42,6 +42,12 @@ class Executor extends \Nette\Object {
 
 
 	/**
+	 * @var array
+	 */
+	private $joined = array();
+
+
+	/**
 	 * @param IReader $reader
 	 */
 	public function __construct(IReader $reader)
@@ -84,9 +90,19 @@ class Executor extends \Nette\Object {
 	 */
 	protected function joinEvents(Execute $execute)
 	{
-		$execute->onAfterExecute += $this->onAfterProcessExecute;
-		$execute->onBeforeCheck += $this->onBeforeProcessCheck;
-		$execute->onBeforeExecute += $this->onBeforeProcessExecute;
+		$name = spl_object_hash($execute);
+		if (isset($this->joined[$name])) return;
+
+		foreach ($this->onBeforeProcessExecute as $callback)
+			$execute->onBeforeExecute[] = $callback;
+
+		foreach ($this->onBeforeProcessCheck as $callback)
+			$execute->onBeforeCheck[] = $callback;
+
+		foreach ($this->onAfterProcessExecute as $callback)
+			$execute->onAfterExecute[] = $callback;
+
+		$this->joined[$name] = TRUE;
 	}
 
 }
