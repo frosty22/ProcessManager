@@ -10,7 +10,7 @@ use ProcessManager\Process\IProcess;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class Execute {
+class Execute extends \Nette\Object {
 
 
 	/**
@@ -38,6 +38,11 @@ class Execute {
 	public function __construct(IProcess $process, $namespace = NULL)
 	{
 		$this->namespace = $namespace;
+
+		if (!$process->getRequiredMapper() instanceof Mapper)
+			throw new InvalidArgumentException('Method getRequiredMapper of process ' . get_class($process) . ' must
+								return Mapper but ' . gettype($process->getRequiredMapper()) . ' return.');
+
 		$this->process = $process;
 	}
 
@@ -49,7 +54,7 @@ class Execute {
 	 */
 	public function addTarget($target)
 	{
-		$this->targets = $target;
+		$this->targets[] = $target;
 		return $this;
 	}
 
@@ -59,11 +64,8 @@ class Execute {
 	 */
 	public function run(Collection $collection)
 	{
-		$mapper = $this->process->getRequiredMapper();
-		$mapper->check($collection);
-
 		if ($this->namespace) {
-			$targetCollection = $collection->{$this->namespace};
+			$targetCollection = $this->getNamespace($collection);
 		} else {
 			$targetCollection = $collection;
 		}
@@ -72,9 +74,29 @@ class Execute {
 			throw new InvalidArgumentException('Iterator of reader must return only instanceof Collection
 													but "'.gettype($targetCollection).'" was returned.');
 
+		$mapper = $this->process->getRequiredMapper();
+		$mapper->check($targetCollection);
+
 		$result = $this->process->execute($targetCollection);
 		foreach ($this->targets as $target)
 			$collection->$target = $result;
+	}
+
+
+	/**
+	 * Get namespace
+	 * @param Collection $collection
+	 * @return NULL|Collection
+	 */
+	private function getNamespace(Collection $collection)
+	{
+		$parts = Explode('.', $this->namespace);
+		foreach ($parts as $part) {
+			if (!$collection->$part instanceof Collection)
+				return NULL;
+			$collection = $collection->$part;
+		}
+		return $collection;
 	}
 
 
