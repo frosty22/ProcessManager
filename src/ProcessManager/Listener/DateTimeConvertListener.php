@@ -5,7 +5,6 @@ namespace ProcessManager\Listener;
 use Kdyby\Events\Subscriber;
 use ProcessManager\Collection;
 use ProcessManager\InvalidArgumentException;
-use ProcessManager\Mapper;
 use ProcessManager\Process\IProcess;
 use ProcessManager\Type\Object;
 
