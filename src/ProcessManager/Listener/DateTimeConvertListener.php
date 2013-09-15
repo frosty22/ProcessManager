@@ -21,13 +21,12 @@ class DateTimeConvertListener extends \Nette\Object implements Subscriber {
 
 	/**
 	 * @param IProcess $process
-	 * @param Mapper $mapper
 	 * @param Collection $collection
 	 * @throws InvalidArgumentException
 	 */
-	public function onBeforeProcessCheck(IProcess $process, Mapper $mapper, Collection $collection)
+	public function onBeforeProcessCheck(IProcess $process, Collection $collection)
 	{
-		foreach ($mapper as $key => $type) {
+		foreach ($process->getRequiredMapper() as $key => $type) {
 			if (($type instanceof Object) && ($type->getClassName() == 'DateTime')) {
 				if (empty($collection->$key))
 						$collection->$key = NULL;
