@@ -7,7 +7,6 @@ use Kdyby\Doctrine\EntityManager;
 use Nette\Utils\Validators;
 use ProcessManager\Collection;
 use ProcessManager\InvalidIdentifiedException;
-use ProcessManager\Mapper;
 use ProcessManager\Process\IProcess;
 use ProcessManager\Type;
 
@@ -50,13 +49,12 @@ class IdentifiedEntityConvertListener extends \Nette\Object implements \Kdyby\Ev
 	/**
 	 * Called before collection is checked.
 	 * @param IProcess $process
-	 * @param Mapper $mapper
 	 * @param Collection $collection
 	 * @throws InvalidIdentifiedException
 	 */
-	public function onBeforeProcessCheck(IProcess $process, Mapper $mapper, Collection $collection)
+	public function onBeforeProcessCheck(IProcess $process, Collection $collection)
 	{
-		foreach ($mapper as $name => $type) {
+		foreach ($process->getRequiredMapper() as $name => $type) {
 			if ($type instanceof Type\Object) {
 				if (is_subclass_of($type->getClassName(), 'Ale\Entities\IdentifiedEntity')) {
 					$value = $collection->$name;
