@@ -35,6 +35,7 @@ class Collection implements \ArrayAccess {
 	 */
 	public function exist($name)
 	{
+		$this->checkName($name);
 		return isset($this->values[$name]);
 	}
 
@@ -46,6 +47,7 @@ class Collection implements \ArrayAccess {
 	 */
 	public function __get($name)
 	{
+		$this->checkName($name);
 		return isset($this->values[$name]) ? $this->values[$name] : NULL;
 	}
 
@@ -91,6 +93,7 @@ class Collection implements \ArrayAccess {
 	 */
 	public function __unset($name)
 	{
+		$this->checkName($name);
 		unset($this->values[$name]);
 	}
 
@@ -132,5 +135,17 @@ class Collection implements \ArrayAccess {
 	{
 		$this->__unset($offset);
 	}
+
+
+	/**
+	 * Check name
+	 * @param string $name
+	 */
+	private function checkName($name)
+	{
+		if (strpos($name, '.') !== FALSE)
+			throw new InvalidArgumentException('Name of element cannot contains ".", its reserved for Collection.');
+	}
+
 
 }
