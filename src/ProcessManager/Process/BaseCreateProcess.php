@@ -41,6 +41,42 @@ abstract class BaseCreateProcess extends \Nette\Object implements IProcess {
 
 
 	/**
+	 * @param \Kdyby\Doctrine\EntityManager $entityManager
+	 */
+	public function setEntityManager(EntityManager $entityManager)
+	{
+		$this->entityManager = $entityManager;
+	}
+
+
+	/**
+	 * @param \ProcessManager\EntityRequirements $entityRequirements
+	 */
+	public function setEntityRequirements(EntityRequirements $entityRequirements)
+	{
+		$this->entityRequirements = $entityRequirements;
+	}
+	
+
+	/**
+	 * @return \Kdyby\Doctrine\EntityManager
+	 */
+	public function getEntityManager()
+	{
+		return $this->entityManager;
+	}
+
+
+	/**
+	 * @return \ProcessManager\EntityRequirements
+	 */
+	public function getEntityRequirements()
+	{
+		return $this->entityRequirements;
+	}
+
+
+	/**
 	 * Return required mapper, for data input.
 	 * @return \ProcessManager\Mapper
 	 */
