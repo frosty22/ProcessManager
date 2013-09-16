@@ -91,7 +91,7 @@ class EntityRequirements extends \Nette\Object {
 			}
 
 			if ($add)
-				$add->setRequired(!$column->isNullable() || $column->getDefault());
+				$add->setRequired($column->isNullable() === FALSE && $column->getDefault() === NULL);
 
 		}
 
