@@ -22,6 +22,12 @@ class EntityRequirements extends \Nette\Object {
 
 
 	/**
+	 * @var array
+	 */
+	private $mappers = array();
+
+
+	/**
 	 * @param \EntityMetaReader\EntityReader $entityReader
 	 */
 	public function __construct(\EntityMetaReader\EntityReader $entityReader)
@@ -31,16 +37,15 @@ class EntityRequirements extends \Nette\Object {
 
 
 	/**
-	 * @param BaseEntity|string $entity
+	 * @param string $entity
 	 * @return Mapper
 	 * @throws UnsupportedException
 	 * @throws InvalidArgumentException
 	 */
 	public function createMapper($entity)
 	{
-		if ((!$entity instanceof BaseEntity) && !is_string($entity))
-			throw new InvalidArgumentException('Parameter must be inherited of BaseEntity or string
-					name of class of entity but ' . gettype($entity) . ' given.');
+		if (isset($this->mappers[$entity]))
+			return $this->mappers[$entity];
 
 		$mapper = new Mapper();
 
@@ -95,6 +100,7 @@ class EntityRequirements extends \Nette\Object {
 
 		}
 
+		$this->mappers[$entity] = $mapper;
 		return $mapper;
 	}
 
