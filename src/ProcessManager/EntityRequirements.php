@@ -3,6 +3,7 @@
 namespace ProcessManager;
 
 use Ale\Entities\BaseEntity;
+use Ale\InvalidArgumentException;
 
 /**
  * Read entity requirements
@@ -30,12 +31,17 @@ class EntityRequirements extends \Nette\Object {
 
 
 	/**
-	 * @param BaseEntity $entity
+	 * @param BaseEntity|string $entity
 	 * @return Mapper
 	 * @throws UnsupportedException
+	 * @throws InvalidArgumentException
 	 */
-	public function createMapper(BaseEntity $entity)
+	public function createMapper($entity)
 	{
+		if ((!$entity instanceof BaseEntity) && !is_string($entity))
+			throw new InvalidArgumentException('Parameter must be inherited of BaseEntity or string
+					name of class of entity but ' . gettype($entity) . ' given.');
+
 		$mapper = new Mapper();
 
 		$columns = $this->entityMetaReader->getEntityColumns($entity);
