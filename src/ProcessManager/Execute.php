@@ -17,6 +17,8 @@ use ProcessManager\Process\IProcess;
 class Execute extends \Nette\Object {
 
 
+	const TARGET = -1;
+
 	/**
 	 * Events
 	 * @var array
@@ -42,6 +44,12 @@ class Execute extends \Nette\Object {
 	 * @var array
 	 */
 	private $targets = array();
+
+
+	/**
+	 * @var array
+	 */
+	private $conditions = array();
 
 
 	/**
@@ -74,14 +82,29 @@ class Execute extends \Nette\Object {
 
 
 	/**
+	 * Add condition for run - IF collection target = VALUE, run
+	 * @param string $target
+	 * @param mixed $value
+	 */
+	public function addCondition($target, $value = NULL)
+	{
+		$this->conditions[$target] = $value;
+	}
+
+
+	/**
 	 * Run on collection
 	 * @param Collection $collection
 	 * @throws InvalidArgumentException
+	 * @return mixed
 	 */
 	public function run(Collection $collection)
 	{
+		if ($this->canRun($collection) === FALSE)
+			return NULL;
+
 		if ($this->namespace) {
-			$targetCollection = $this->getNamespace($collection);
+			$targetCollection = $collection[$this->namespace];
 		} else {
 			$targetCollection = $collection;
 		}
@@ -101,24 +124,43 @@ class Execute extends \Nette\Object {
 			$collection->$target = $result;
 
 		$this->onAfterExecute($this->process, $collection, $result);
+
+		return $result;
 	}
 
 
 	/**
-	 * Get namespace
+	 * Check if can run process
 	 * @param Collection $collection
-	 * @return NULL|Collection
+	 * @return bool
 	 */
-	private function getNamespace(Collection $collection)
+	private function canRun(Collection $collection)
 	{
-		$parts = Explode('.', $this->namespace);
-		foreach ($parts as $part) {
-			if (!$collection->$part instanceof Collection)
-				return NULL;
-			$collection = $collection->$part;
+		foreach ($this->conditions as $target => $value) {
+
+			if ($target === self::TARGET) {
+				foreach ($this->targets as $target)
+					if (!$this->compare($collection->$target, $value))
+						return FALSE;
+			}
+			elseif (!$this->compare($collection->$target, $value))
+				return FALSE;
+
 		}
-		return $collection;
+		return TRUE;
 	}
 
+
+	/**
+	 * Compare values
+	 * @param mixed $targetValue
+	 * @param mixed $value
+	 * @return bool
+	 */
+	private function compare($targetValue, $value)
+	{
+		// TODO: Kontrola podle typů, přenést do objektu Condition ?
+		return ($targetValue === $value);
+	}
 
 }
