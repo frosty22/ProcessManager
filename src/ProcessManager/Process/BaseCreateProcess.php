@@ -71,7 +71,8 @@ abstract class BaseCreateProcess extends \Nette\Object implements IProcess {
 	{
 		$mapper = $this->getRequiredMapper();
 
-		$entity = new $this->getEntityName();
+		$entityName = $this->getEntityName();
+		$entity = new $entityName;
 		foreach ($mapper as $name => $type) {
 			if (isset($collection->$name))
 				$entity->$name = $collection->$name;
