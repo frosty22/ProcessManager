@@ -35,8 +35,15 @@ class Collection implements \ArrayAccess {
 	 */
 	public function exist($name)
 	{
-		$this->checkName($name);
-		return isset($this->values[$name]);
+		$collection = $this->getTargetCollection($name);
+
+		if ($collection === NULL)
+			return FALSE;
+
+		if ($collection === $this)
+			return isset($this->values[$this->getTargetKey($name)]);
+
+		return isset($collection[$this->getTargetKey($name)]);
 	}
 
 
@@ -47,8 +54,16 @@ class Collection implements \ArrayAccess {
 	 */
 	public function __get($name)
 	{
-		$this->checkName($name);
-		return isset($this->values[$name]) ? $this->values[$name] : NULL;
+		$key = $this->getTargetKey($name);
+		$collection = $this->getTargetCollection($name);
+
+		if ($collection === NULL)
+			return NULL;
+
+		if ($collection === $this)
+			return isset($this->values[$key]) ? $this->values[$key] : NULL;
+
+		return $collection->$key;
 	}
 
 
@@ -93,8 +108,12 @@ class Collection implements \ArrayAccess {
 	 */
 	public function __unset($name)
 	{
-		$this->checkName($name);
-		unset($this->values[$name]);
+		$collection = $this->getTargetCollection($name);
+
+		if ($collection === $this)
+			unset($this->values[$this->getTargetKey($name)]);
+		elseif ($collection instanceof Collection)
+			unset($collection[$this->getTargetKey($name)]);
 	}
 
 
@@ -138,14 +157,39 @@ class Collection implements \ArrayAccess {
 
 
 	/**
-	 * Check name
-	 * @param string $name
+	 * Get target collection
+	 * @param string $fullName
+	 * @return Collection|NULL
 	 */
-	private function checkName($name)
+	private function getTargetCollection($fullName)
 	{
-		if (strpos($name, '.') !== FALSE)
-			throw new InvalidArgumentException('Name of element cannot contains ".", its reserved for Collection.');
+		$parts = Explode('.', $fullName);
+		unset($parts[count($parts) - 1]);
+
+		if (!count($parts))
+			return $this;
+
+		$collection = $this;
+		foreach ($parts as $part) {
+			if (!$collection->$part instanceof Collection)
+				return NULL;
+			$collection = $collection->$part;
+		}
+
+		return $collection;
 	}
 
+
+	/**
+	 * Get target key
+	 * @param string $fullName
+	 * @return string
+	 */
+	private function getTargetKey($fullName)
+	{
+		$dot = strrpos($fullName, '.');
+		if ($dot === FALSE) return $fullName;
+		return substr($fullName, $dot + 1);
+	}
 
 }
