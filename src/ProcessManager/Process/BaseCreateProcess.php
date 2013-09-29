@@ -56,7 +56,7 @@ abstract class BaseCreateProcess extends \Nette\Object implements IProcess {
 	{
 		$this->entityRequirements = $entityRequirements;
 	}
-	
+
 
 	/**
 	 * @return \Kdyby\Doctrine\EntityManager

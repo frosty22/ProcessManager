@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<content>
+	<name id="123">Jan</name>
+	<genre>man</genre>
+	<web>
+		<link https="no">google.com</link>
+		<name>Google</name>
+	</web>
+</content>

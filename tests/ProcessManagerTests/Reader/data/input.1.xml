@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<content>
+	<name>Jan</name>
+	<genre>man</genre>
+	<web>
+		<link>google.com</link>
+		<name>Google</name>
+	</web>
+	<items>
+		<item>
+			<name>First</name>
+			<age>2</age>
+		</item>
+		<item>
+			<name>Second</name>
+			<age>3</age>
+		</item>
+	</items>
+</content>

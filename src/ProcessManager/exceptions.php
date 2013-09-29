@@ -93,3 +93,7 @@ class InvalidValueException extends RuntimeException {
 
 
 class InvalidIdentifiedException extends InvalidValueException { }
+class FileNotFoundException extends RuntimeException { }
+class ConnectionErrorException extends RuntimeException { }
+
+
