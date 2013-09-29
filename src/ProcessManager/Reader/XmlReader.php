@@ -5,7 +5,6 @@ namespace ProcessManager\Reader;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 use ProcessManager\Collection;
-use ProcessManager\InvalidArgumentException;
 use ProcessManager\Reader\IReader;
 
 /**
