@@ -208,8 +208,8 @@ class HtmlReader implements IReader, \Iterator {
 			if (!$element)
 				$output[$key] = NULL;
 			else {
-				if ($attribute) $output[$key] = $element->{$attribute};
-				else $output[$key] = $element->plaintext;
+				if ($attribute) $output[$key] = trim($element->{$attribute});
+				else $output[$key] = trim(html_entity_decode(str_replace("&nbsp;", " ", $element->plaintext)));
 			}
 
 		}

@@ -13,7 +13,7 @@ $i = 0;
 foreach ($reader as $collection) {
 	$i++;
 
-	Tester\Assert::equal("Header", $collection->bar);
+	Tester\Assert::equal("Header bar", $collection->bar);
 	Tester\Assert::equal("header_id", $collection->baz);
 
 	if ($i === 1) Tester\Assert::equal("Foo", $collection->foo);
