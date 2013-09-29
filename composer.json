@@ -14,7 +14,8 @@
 		"nette/nette": "2.*",
 		"frosty22/ale": "*",
 		"frosty22/entity-meta-reader": "*",
-		"kdyby/events": "*"
+		"kdyby/events": "*",
+		"sunra/php-simple-html-dom-parser": "v1.5.0"
 	},
 	"autoload": {
 		"psr-0": {

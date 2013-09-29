@@ -5,7 +5,11 @@ namespace ProcessManager\Reader;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 use ProcessManager\Collection;
+use ProcessManager\ConnectionErrorException;
+use ProcessManager\FileNotFoundException;
+use ProcessManager\InvalidArgumentException;
 use ProcessManager\Reader\IReader;
+use Sunra\PhpSimple\HtmlDomParser;
 
 /**
  * XML reader.
@@ -14,7 +18,7 @@ use ProcessManager\Reader\IReader;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class XmlReader implements IReader, \Iterator {
+class HtmlReader implements IReader, \Iterator {
 
 
 	/**
@@ -30,9 +34,9 @@ class XmlReader implements IReader, \Iterator {
 
 
 	/**
-	 * @var \SimpleXMLElement
+	 * @var \simple_html_dom
 	 */
-	private $xml;
+	private $html;
 
 
 	/**
@@ -56,10 +60,10 @@ class XmlReader implements IReader, \Iterator {
 
 
 	/**
-	 * Root element for iterate
-	 * @var string|null
+	 * Iterate keys
+	 * @var array
 	 */
-	private $root = NULL;
+	private $iterateKeys = array();
 
 
 	/**
@@ -67,6 +71,7 @@ class XmlReader implements IReader, \Iterator {
 	 */
 	public function __construct($source)
 	{
+		// TODO: Sjednotit načítání source přes jiný objekt, spolu s XML Readrem a dalšími
 		if (Validators::isUrl($source)) {
 			$source = $this->loadRemoteUrl($source);
 		}
@@ -74,7 +79,7 @@ class XmlReader implements IReader, \Iterator {
 			$source = $this->loadFile($source);
 		}
 
-		$this->xml = simplexml_load_string($source);
+		$this->html = HtmlDomParser::str_get_html($source);
 	}
 
 
@@ -94,28 +99,28 @@ class XmlReader implements IReader, \Iterator {
 	/**
 	 * Add key for collection
 	 * @param string $key
-	 * @param string $source
+	 * @param string $path
 	 * @return $this
 	 */
-	public function addKey($key, $source)
+	public function addKey($key, $path)
 	{
 		$this->inited = FALSE;
-		$this->keys[$key] = $source;
+		$this->keys[$key] = $path;
 		return $this;
 	}
 
 
 	/**
 	 * Set iterable element
-	 * @param string $root
-	 * @param string $iterate
+	 * @param string $path
+	 * @param array $keys
 	 * @return $this
 	 */
-	public function setIterable($root, $iterate)
+	public function setIterable($path, array $keys)
 	{
-		$this->root = $root;
-		$this->iterable = $iterate;
 		$this->inited = FALSE;
+		$this->iterable = $path;
+		$this->iterateKeys = $keys;
 		return $this;
 	}
 
@@ -167,58 +172,49 @@ class XmlReader implements IReader, \Iterator {
 		$this->inited = TRUE;
 
 		$this->array = array();
+
+		$results = $this->getResults($this->html, $this->keys);
 		if ($this->iterable) {
-			foreach ($this->xml->{$this->root}->{$this->iterable} as $item) {
-				$this->array[] = $this->getCollection($item);
+			foreach ($this->html->find($this->iterable) as $item) {
+				$this->array[] = new Collection(array_merge($results, $this->getResults($item, $this->iterateKeys)));
 			}
-		} else {
-			$this->array[] = $this->getCollection();
 		}
 	}
 
 
 	/**
-	 * @param string|NULL $item
-	 * @return Collection
+	 * @param \simple_html_dom_node $node
+	 * @param array $keys
+	 * @return array
 	 */
-	private function getCollection($item = NULL)
+	private function getResults($node, array $keys)
 	{
+		if (!$node instanceof \simple_html_dom && !$node instanceof \simple_html_dom_node)
+			throw new InvalidArgumentException('Error in parse node.');
+
 		$output = array();
 
-		foreach ($this->keys as $value => $key) {
-			$parts = Explode(".", $key);
+		foreach ($keys as $key => $path) {
 
-			if (isset($parts[1]) && $parts[0] === $this->root && $parts[1] === $this->iterable) {
-				$element = $item;
-				unset($parts[0], $parts[1]);
-			} else
-				$element = $this->xml;
-
-			$i = 0;
 			$attribute = NULL;
-			foreach ($parts as $part) {
-
-				$i++;
-				if (count($parts) === $i && ($match = Strings::match($part, '~^(.*?)\:([^:]+)$~'))) {
-					$attribute = $match[2];
-					$part = $match[1];
-				}
-
-				if (isset($element->$part) && $element->$part instanceof \SimpleXMLElement) {
-					$element = $element->$part;
-				} else {
-					$output[$value] = NULL;
-					continue 2;
-				}
+			if ($match = Strings::match($path, '~^(.*?)\:([^:]+)$~')) {
+				$path = $match[1];
+				$attribute = $match[2];
 			}
 
-			if ($attribute) {
-				$output[$value] = isset($element[$attribute]) ? (string)$element[$attribute] : NULL;
-			} else
-				$output[$value] = !empty($element) ? (string)$element : NULL;
+			if ($path == "") $element = $node;
+			else $element = $node->find($path, 0);
+
+			if (!$element)
+				$output[$key] = NULL;
+			else {
+				if ($attribute) $output[$key] = $element->{$attribute};
+				else $output[$key] = $element->plaintext;
+			}
+
 		}
 
-		return new Collection($output);
+		return $output;
 	}
 
 
