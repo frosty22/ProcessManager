@@ -48,6 +48,12 @@ class Executor extends \Nette\Object {
 
 
 	/**
+	 * @var array
+	 */
+	private $collectionKeys = array();
+
+
+	/**
 	 * @param IReader $reader
 	 */
 	public function __construct(IReader $reader)
@@ -70,12 +76,33 @@ class Executor extends \Nette\Object {
 
 
 	/**
+	 * Add keys to all read collections
+	 * @param $key
+	 * @param mixed $value
+	 */
+	public function append($key, $value = NULL)
+	{
+		if (is_array($key)) {
+			foreach ($key as $id => $value)
+				$this->append($id, $value);
+		} else {
+			$this->collectionKeys[$key] = $value;
+		}
+	}
+
+
+	/**
 	 * Run
 	 */
 	public function run()
 	{
 		foreach ($this->reader as $collection) {
 			$this->onReadCollection($this->reader, $collection);
+
+			foreach ($this->collectionKeys as $key => $value) {
+				if (!isset($collection->$key)) $collection->$key = $value;
+			}
+
 			foreach ($this->executes as $execute) {
 				$this->joinEvents($execute);
 				$execute->run($collection);
