@@ -77,7 +77,7 @@ class Executor extends \Nette\Object {
 
 	/**
 	 * Add keys to all read collections
-	 * @param $key
+	 * @param string|array $key
 	 * @param mixed $value
 	 */
 	public function append($key, $value = NULL)
