@@ -10,7 +10,7 @@ use ProcessManager\Collection;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class FormReader extends \Nette\FreezableObject implements IReader, \Iterator {
+class FormReader extends \Nette\FreezableObject implements IReader {
 
 
 	/**

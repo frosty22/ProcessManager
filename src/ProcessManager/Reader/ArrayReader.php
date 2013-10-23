@@ -13,7 +13,7 @@ use ProcessManager\Reader\IReader;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class ArrayReader implements IReader, \Iterator {
+class ArrayReader implements IReader {
 
 
 	/**

@@ -18,7 +18,7 @@ use Sunra\PhpSimple\HtmlDomParser;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class HtmlReader implements IReader, \Iterator {
+class HtmlReader implements IReader {
 
 
 	/**

@@ -14,7 +14,7 @@ use ProcessManager\Reader\IReader;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class XmlReader implements IReader, \Iterator {
+class XmlReader implements IReader {
 
 
 	/**

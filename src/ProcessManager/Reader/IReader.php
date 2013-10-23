@@ -9,6 +9,6 @@ namespace ProcessManager\Reader;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-interface IReader {
+interface IReader extends \Iterator {
 
 }
