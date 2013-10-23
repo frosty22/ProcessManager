@@ -4,6 +4,7 @@ namespace ProcessManager;
 
 use ProcessManager\Process\IProcess;
 use ProcessManager\Reader\IReader;
+use ProcessManager\Reader\NullableReader;
 
 /**
  *
@@ -56,8 +57,11 @@ class Executor extends \Nette\Object {
 	/**
 	 * @param IReader $reader
 	 */
-	public function __construct(IReader $reader)
+	public function __construct(IReader $reader = NULL)
 	{
+		if (is_null($reader))
+			$reader = new NullableReader();
+
 		$this->reader = $reader;
 	}
 
