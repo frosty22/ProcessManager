@@ -1,9 +1,11 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 $reader = new \ProcessManager\Reader\NullableReader();
+$reader->init($manager);
 
 $i = 0;
 foreach ($reader as $collection) {

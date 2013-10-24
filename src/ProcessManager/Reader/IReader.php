@@ -11,4 +11,14 @@ namespace ProcessManager\Reader;
  */
 interface IReader extends \Iterator {
 
+
+	/**
+	 * Initialize read, can provides external source loading etc.
+	 * Is called one times before run, in $executor->execute()
+	 * @param \ProcessManager\ProcessManager $manager
+	 * @return void
+	 */
+	public function init(\ProcessManager\ProcessManager $manager);
+
+
 }

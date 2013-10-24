@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 $reader = new \ProcessManager\Reader\XmlReader(__DIR__ . "/data/input.1.xml");
@@ -17,6 +18,11 @@ $reader->setKeys(array(
 	'empty3'			=> 'foo.bar'
 ));
 
+$reader->init($manager);
+
+Tester\Assert::exception(function() use ($reader){
+	$reader->addKey('foo', 'baz');
+}, 'Nette\InvalidStateException');
 
 
 $i = 0;

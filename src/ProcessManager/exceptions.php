@@ -12,6 +12,7 @@ abstract class RuntimeException extends Exception { }
 // Logic exceptions
 class UnsupportedException extends LogicException { }
 class InvalidArgumentException extends LogicException { }
+class InvalidStateException extends LogicException { }
 
 // Runtime exceptions
 class MissingKeyException extends RuntimeException {

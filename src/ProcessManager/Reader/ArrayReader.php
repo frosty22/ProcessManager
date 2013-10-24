@@ -13,7 +13,7 @@ use ProcessManager\Reader\IReader;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class ArrayReader implements IReader {
+class ArrayReader extends \Nette\Object implements IReader {
 
 
 	/**
@@ -34,6 +34,14 @@ class ArrayReader implements IReader {
 	public function __construct(array $array)
 	{
 		$this->array = Validators::isList($array) ? $array : array($array);
+	}
+
+
+	/**
+	 * @param \ProcessManager\ProcessManager $manager
+	 */
+	public function init(\ProcessManager\ProcessManager $manager)
+	{
 	}
 
 

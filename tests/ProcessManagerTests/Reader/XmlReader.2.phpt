@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 $reader = new \ProcessManager\Reader\XmlReader(__DIR__ . "/data/input.2.xml");
@@ -13,6 +14,11 @@ $reader->setKeys(array(
 	'secure'			=> 'web.link:https'
 ));
 
+$reader->init($manager);
+
+Tester\Assert::exception(function() use ($reader){
+	$reader->addKey('foo', 'baz');
+}, 'Nette\InvalidStateException');
 
 $i = 0;
 foreach ($reader as $collection) {

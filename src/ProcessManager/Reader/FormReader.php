@@ -35,6 +35,14 @@ class FormReader extends \Nette\FreezableObject implements IReader {
 
 
 	/**
+	 * @param \ProcessManager\ProcessManager $manager
+	 */
+	public function init(\ProcessManager\ProcessManager $manager)
+	{
+	}
+
+
+	/**
 	 * @return Collection
 	 */
 	public function getCollection()

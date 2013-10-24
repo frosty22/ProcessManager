@@ -8,6 +8,7 @@ use ProcessManager\Collection;
 use ProcessManager\ConnectionErrorException;
 use ProcessManager\FileNotFoundException;
 use ProcessManager\InvalidArgumentException;
+use ProcessManager\InvalidStateException;
 use ProcessManager\Reader\IReader;
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -18,7 +19,7 @@ use Sunra\PhpSimple\HtmlDomParser;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class HtmlReader implements IReader {
+class HtmlReader extends \Nette\FreezableObject implements IReader {
 
 
 	/**
@@ -30,7 +31,7 @@ class HtmlReader implements IReader {
 	/**
 	 * @var array
 	 */
-	private $array = array();
+	private $array;
 
 
 	/**
@@ -43,13 +44,6 @@ class HtmlReader implements IReader {
 	 * @var array
 	 */
 	private $keys = array();
-
-
-	/**
-	 * Is collection inited
-	 * @var bool
-	 */
-	private $inited = FALSE;
 
 
 	/**
@@ -84,6 +78,23 @@ class HtmlReader implements IReader {
 
 
 	/**
+	 * @param \ProcessManager\ProcessManager $manager
+	 */
+	public function init(\ProcessManager\ProcessManager $manager)
+	{
+		$this->freeze();
+		$this->array = array();
+
+		$results = $this->getResults($this->html, $this->keys);
+		if ($this->iterable) {
+			foreach ($this->html->find($this->iterable) as $item) {
+				$this->array[] = new Collection(array_merge($results, $this->getResults($item, $this->iterateKeys)));
+			}
+		}
+	}
+
+
+	/**
 	 * Set keys
 	 * @param array $keys
 	 * @return $this
@@ -104,7 +115,7 @@ class HtmlReader implements IReader {
 	 */
 	public function addKey($key, $path)
 	{
-		$this->inited = FALSE;
+		$this->updating();
 		$this->keys[$key] = $path;
 		return $this;
 	}
@@ -118,7 +129,7 @@ class HtmlReader implements IReader {
 	 */
 	public function setIterable($path, array $keys)
 	{
-		$this->inited = FALSE;
+		$this->updating();
 		$this->iterable = $path;
 		$this->iterateKeys = $keys;
 		return $this;
@@ -165,24 +176,6 @@ class HtmlReader implements IReader {
 
 
 	/**
-	 * Init
-	 */
-	private function init()
-	{
-		$this->inited = TRUE;
-
-		$this->array = array();
-
-		$results = $this->getResults($this->html, $this->keys);
-		if ($this->iterable) {
-			foreach ($this->html->find($this->iterable) as $item) {
-				$this->array[] = new Collection(array_merge($results, $this->getResults($item, $this->iterateKeys)));
-			}
-		}
-	}
-
-
-	/**
 	 * @param \simple_html_dom_node $node
 	 * @param array $keys
 	 * @return array
@@ -222,7 +215,6 @@ class HtmlReader implements IReader {
 
 
 	public function rewind() {
-		$this->init();
 		$this->position = 0;
 	}
 
@@ -243,6 +235,9 @@ class HtmlReader implements IReader {
 
 
 	public function valid() {
+		if (!isset($this->array))
+			throw new InvalidStateException("Do not call reader directly! Only for use with ProcessManager.");
+
 		return isset($this->array[$this->position]);
 	}
 

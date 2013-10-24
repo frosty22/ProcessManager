@@ -5,6 +5,7 @@ namespace ProcessManager\Reader;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 use ProcessManager\Collection;
+use ProcessManager\InvalidStateException;
 use ProcessManager\Reader\IReader;
 
 /**
@@ -14,7 +15,7 @@ use ProcessManager\Reader\IReader;
  * @author Ledvinka Vít, frosty22 <ledvinka.vit@gmail.com>
  *
  */
-class XmlReader implements IReader {
+class XmlReader extends \Nette\FreezableObject implements IReader {
 
 
 	/**
@@ -26,7 +27,7 @@ class XmlReader implements IReader {
 	/**
 	 * @var array
 	 */
-	private $array = array();
+	private $array;
 
 
 	/**
@@ -39,13 +40,6 @@ class XmlReader implements IReader {
 	 * @var array
 	 */
 	private $keys = array();
-
-
-	/**
-	 * Is collection inited
-	 * @var bool
-	 */
-	private $inited = FALSE;
 
 
 	/**
@@ -79,6 +73,24 @@ class XmlReader implements IReader {
 
 
 	/**
+	 * @param \ProcessManager\ProcessManager $manager
+	 */
+	public function init(\ProcessManager\ProcessManager $manager)
+	{
+		$this->freeze();
+
+		$this->array = array();
+		if ($this->iterable) {
+			foreach ($this->xml->{$this->root}->{$this->iterable} as $item) {
+				$this->array[] = $this->getCollection($item);
+			}
+		} else {
+			$this->array[] = $this->getCollection();
+		}
+	}
+
+
+	/**
 	 * Set keys
 	 * @param array $keys
 	 * @return $this
@@ -99,7 +111,7 @@ class XmlReader implements IReader {
 	 */
 	public function addKey($key, $source)
 	{
-		$this->inited = FALSE;
+		$this->updating();
 		$this->keys[$key] = $source;
 		return $this;
 	}
@@ -113,9 +125,9 @@ class XmlReader implements IReader {
 	 */
 	public function setIterable($root, $iterate)
 	{
+		$this->updating();
 		$this->root = $root;
 		$this->iterable = $iterate;
-		$this->inited = FALSE;
 		return $this;
 	}
 
@@ -156,24 +168,6 @@ class XmlReader implements IReader {
 			throw new FileNotFoundException("File '$filename' not found.'");
 
 		return file_get_contents($filename);
-	}
-
-
-	/**
-	 * Init
-	 */
-	private function init()
-	{
-		$this->inited = TRUE;
-
-		$this->array = array();
-		if ($this->iterable) {
-			foreach ($this->xml->{$this->root}->{$this->iterable} as $item) {
-				$this->array[] = $this->getCollection($item);
-			}
-		} else {
-			$this->array[] = $this->getCollection();
-		}
 	}
 
 
@@ -226,7 +220,6 @@ class XmlReader implements IReader {
 
 
 	public function rewind() {
-		$this->init();
 		$this->position = 0;
 	}
 
@@ -247,6 +240,9 @@ class XmlReader implements IReader {
 
 
 	public function valid() {
+		if (!isset($this->array))
+			throw new InvalidStateException("Do not call reader directly! Only for use with ProcessManager.");
+
 		return isset($this->array[$this->position]);
 	}
 

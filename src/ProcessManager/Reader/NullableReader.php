@@ -2,6 +2,7 @@
 
 namespace ProcessManager\Reader;
 use ProcessManager\Collection;
+use ProcessManager\InvalidStateException;
 
 /**
  * Nullable reader
@@ -25,12 +26,18 @@ class NullableReader implements IReader {
 	private $collection;
 
 
-	public function __construct()
+	/**
+	 * @param \ProcessManager\ProcessManager $manager
+	 */
+	public function init(\ProcessManager\ProcessManager $manager)
 	{
 		$this->collection = new Collection();
 	}
 
 
+	/**
+	 * Rewind collection
+	 */
 	public function rewind() {
 		$this->iterator = TRUE;
 	}
@@ -38,8 +45,12 @@ class NullableReader implements IReader {
 
 	/**
 	 * @return Collection
+	 * @throws \ProcessManager\InvalidStateException
 	 */
 	public function current() {
+		if (!isset($this->collection))
+			throw new InvalidStateException("Do not call reader directly! Only for use with ProcessManager.");
+
 		return $this->collection;
 	}
 
