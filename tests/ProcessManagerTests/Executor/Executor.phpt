@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 $run = 0;
@@ -46,7 +47,7 @@ $exector->add(new Process(), 'bar');
 $exector->append("baz", "baz");
 $exector->append("bar.baz", "baz");
 $exector->append(array("arr1" => "1", "bar.arr1" => "1", "bar.arr2" => "2", "arr2" => "2"));
-$exector->run();
+$exector->run($manager);
 
 
 Tester\Assert::equal(6, $run);

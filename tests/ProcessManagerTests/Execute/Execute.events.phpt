@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 class Process implements \ProcessManager\Process\IProcess
@@ -55,7 +56,7 @@ $execute->onAfterExecute[] = function(\ProcessManager\Process\IProcess $process,
 	Tester\Assert::equal('Honza!', $collection->user);
 };
 
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 
 
 Tester\Assert::equal(1, $called->onBeforeCheck);

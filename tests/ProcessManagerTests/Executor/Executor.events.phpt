@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 $run = 0;
@@ -57,7 +58,7 @@ $executor->onAfterProcessExecute[] = function(\ProcessManager\Process\IProcess $
 };
 
 $executor->add(new Process());
-$executor->run();
+$executor->run($manager);
 
 
 Tester\Assert::equal(2, $called->onReadCollection);

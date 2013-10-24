@@ -45,12 +45,6 @@ class Executor extends \Nette\Object {
 	/**
 	 * @var array
 	 */
-	private $joined = array();
-
-
-	/**
-	 * @var array
-	 */
 	private $collectionKeys = array();
 
 
@@ -69,7 +63,7 @@ class Executor extends \Nette\Object {
 	/**
 	 * Add process
 	 * @param IProcess $process
-	 * @param string|null $namespace
+	 * @param null|string $namespace
 	 * @return Execute
 	 */
 	public function add(IProcess $process, $namespace = NULL)
@@ -96,9 +90,10 @@ class Executor extends \Nette\Object {
 
 
 	/**
-	 * Run
+	 * Do not call directly, use $manager->execute(Executor $executor)
+	 * @param ProcessManager $manager
 	 */
-	public function run()
+	public function run(ProcessManager $manager)
 	{
 		foreach ($this->reader as $collection) {
 			$this->onReadCollection($this->reader, $collection);
@@ -108,32 +103,10 @@ class Executor extends \Nette\Object {
 			}
 
 			foreach ($this->executes as $execute) {
-				$this->joinEvents($execute);
-				$execute->run($collection);
+				$execute->run($manager, $this, $collection);
 			}
 		}
 	}
 
-
-	/**
-	 * Join events
-	 * @param Execute $execute
-	 */
-	protected function joinEvents(Execute $execute)
-	{
-		$name = spl_object_hash($execute);
-		if (isset($this->joined[$name])) return;
-
-		foreach ($this->onBeforeProcessExecute as $callback)
-			$execute->onBeforeExecute[] = $callback;
-
-		foreach ($this->onBeforeProcessCheck as $callback)
-			$execute->onBeforeCheck[] = $callback;
-
-		foreach ($this->onAfterProcessExecute as $callback)
-			$execute->onAfterExecute[] = $callback;
-
-		$this->joined[$name] = TRUE;
-	}
 
 }

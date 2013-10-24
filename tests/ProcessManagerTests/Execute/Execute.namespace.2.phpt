@@ -1,7 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
-
+require __DIR__ . "/../mock.php";
 
 class SecondProcess implements \ProcessManager\Process\IProcess
 {
@@ -28,7 +28,7 @@ $collection = new \ProcessManager\Collection(array(
 
 $execute = new \ProcessManager\Execute(new SecondProcess(), 'sub.sub.user');
 $execute->addTarget('foo.bar');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 
 Tester\Assert::equal("Jan!", $collection->foo->bar);
 

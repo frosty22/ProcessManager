@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 class Process implements \ProcessManager\Process\IProcess
@@ -22,7 +23,7 @@ $collection = new \ProcessManager\Collection();
 $execute = new \ProcessManager\Execute(new Process());
 $execute->addCondition('cond');
 $execute->addTarget('foo');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 Tester\Assert::equal(12345, $collection->foo);
 
 
@@ -30,7 +31,7 @@ $collection = new \ProcessManager\Collection(array('cond' => 123));
 $execute = new \ProcessManager\Execute(new Process());
 $execute->addCondition('cond');
 $execute->addTarget('foo');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 Tester\Assert::null($collection->foo);
 
 
@@ -39,7 +40,7 @@ $execute = new \ProcessManager\Execute(new Process());
 $execute->addCondition('cond', 123);
 $execute->addCondition('bar', 234);
 $execute->addTarget('foo');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 Tester\Assert::equal(12345, $collection->foo);
 
 
@@ -49,6 +50,6 @@ $execute->addCondition($execute::TARGET, 1);
 $execute->addTarget('foo');
 $execute->addTarget('bar');
 $execute->addTarget('baz');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 Tester\Assert::equal(12345, $collection->foo);
 

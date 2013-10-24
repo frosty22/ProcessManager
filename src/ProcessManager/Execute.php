@@ -94,11 +94,13 @@ class Execute extends \Nette\Object {
 
 	/**
 	 * Run on collection
+	 * @param ProcessManager $manager
+	 * @param Executor $executor
 	 * @param Collection $collection
+	 * @return mixed|null
 	 * @throws InvalidArgumentException
-	 * @return mixed
 	 */
-	public function run(Collection $collection)
+	public function run(ProcessManager $manager, Executor $executor, Collection $collection)
 	{
 		if ($this->canRun($collection) === FALSE)
 			return NULL;
@@ -115,15 +117,24 @@ class Execute extends \Nette\Object {
 
 		$mapper = $this->process->getRequiredMapper();
 
+
 		$this->onBeforeCheck($this->process, $targetCollection);
+		$executor->onBeforeProcessCheck($this->process, $targetCollection);
+		$manager->onBeforeProcessCheck($this->process, $targetCollection);
+
 		$mapper->check($targetCollection);
 
 		$this->onBeforeExecute($this->process, $targetCollection);
+		$executor->onBeforeProcessExecute($this->process, $targetCollection);
+		$manager->onBeforeProcessExecute($this->process, $targetCollection);
+
 		$result = $this->process->execute($targetCollection);
 		foreach ($this->targets as $target)
 			$collection->$target = $result;
 
 		$this->onAfterExecute($this->process, $collection, $result);
+		$executor->onAfterProcessExecute($this->process, $collection, $result);
+		$manager->onAfterProcessExecute($this->process, $collection, $result);
 
 		return $result;
 	}

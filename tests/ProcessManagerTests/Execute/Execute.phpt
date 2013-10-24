@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 class Process implements \ProcessManager\Process\IProcess
@@ -21,7 +22,7 @@ class Process implements \ProcessManager\Process\IProcess
 
 $collection = new \ProcessManager\Collection();
 $execute = new \ProcessManager\Execute(new Process());
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 Tester\Assert::equal(new \ProcessManager\Collection(), $collection);
 
 
@@ -29,7 +30,7 @@ $collection = new \ProcessManager\Collection();
 $execute = new \ProcessManager\Execute(new Process());
 $execute->addTarget('foo');
 $execute->addTarget('bar.baz');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 Tester\Assert::equal(12345, $collection->foo);
 Tester\Assert::equal(12345, $collection->bar->baz);
 

@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . "/../../bootstrap.php";
+require __DIR__ . "/../mock.php";
 
 
 class Process implements \ProcessManager\Process\IProcess
@@ -23,16 +24,16 @@ class Process implements \ProcessManager\Process\IProcess
 
 
 
-Tester\Assert::exception(function(){
+Tester\Assert::exception(function() use($manager, $executor) {
 	$execute = new \ProcessManager\Execute(new Process());
-	$execute->run(new \ProcessManager\Collection());
+	$execute->run($manager, $executor, new \ProcessManager\Collection());
 }, 'ProcessManager\MissingKeyException');
 
 
 
-Tester\Assert::exception(function(){
+Tester\Assert::exception(function() use($manager, $executor) {
 	$execute = new \ProcessManager\Execute(new Process(), 'bar');
-	$execute->run(new \ProcessManager\Collection());
+	$execute->run($manager, $executor, new \ProcessManager\Collection());
 }, 'ProcessManager\InvalidArgumentException');
 
 
@@ -43,7 +44,7 @@ $collection = new \ProcessManager\Collection(array(
 
 $execute = new \ProcessManager\Execute(new Process());
 $execute->addTarget('foo');
-$execute->run($collection);
+$execute->run($manager, $executor, $collection);
 
 Tester\Assert::equal("bar!", $collection->foo);
 
