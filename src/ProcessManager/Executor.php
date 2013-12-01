@@ -96,7 +96,7 @@ class Executor extends \Nette\Object {
 	public function run(ProcessManager $manager)
 	{
 		$this->reader->init($manager);
-		
+
 		foreach ($this->reader as $collection) {
 			$this->onReadCollection($this->reader, $collection);
 
